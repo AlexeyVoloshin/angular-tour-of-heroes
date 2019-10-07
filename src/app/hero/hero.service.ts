@@ -4,23 +4,44 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Hero } from './model/hero';
 import { MessageService } from '../message.service';
 import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeroService {
 
-  private heroesUrl = 'api/heroes';
+  private heroesUrl = environment.apiUrl;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-
+  heroes: Array<Hero> = [];
   constructor(
     private http: HttpClient,
     private messageService: MessageService) { }
-
+  private createHeader(headers: HttpHeaders) {
+    headers = headers || new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Access-Control-Allow-Origin', this.heroesUrl);
+    return headers;
+  }
+  getHeroes2() {
+    // return this.http.get('http://localhost:3000/api/heroes')
+    return this.http.get(this.heroesUrl + '/heroes')
+      .pipe(
+        tap(() => {
+          this.log('fetched heroes');
+        }),
+        catchError(this.handleError<Hero[]>('getHeroes', []))
+    );
+      // {headers: this.createHeader(new HttpHeaders())})
+      // .subscribe((data: Hero) => {
+      // this.heroes = data;
+      // console.log('Heroes', this.heroes);
+    // });
+  }
       getHeroes(): Observable<Hero[]> {
-        return this.http.get<Hero[]>(this.heroesUrl)
+        return this.http.get<Hero[]>( this.heroesUrl + '/heroes')
           .pipe(
             tap(_ => this.log('fetched heroes')),
             catchError(this.handleError<Hero[]>('getHeroes', []))
