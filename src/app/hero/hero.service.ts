@@ -47,8 +47,8 @@ export class HeroService {
             catchError(this.handleError<Hero[]>('getHeroes', []))
           );
       }
-      getHeroNo404<Data>(id: number): Observable<Hero>{
-        const url = `${this.heroesUrl}/?id=${id}`;
+      getHeroNo404<Data>(id: string): Observable<Hero>{
+        const url = `${this.heroesUrl}/heroes/?id=${id}`;
         return this.http.get<Hero[]>(url)
           .pipe(
             map(heroes => heroes[0]),
@@ -59,22 +59,22 @@ export class HeroService {
             catchError(this.handleError<Hero>(`getHero id=${id}`))
           );
       }
-      getHero(id: number): Observable<Hero> {
-        const url = `${this.heroesUrl}/${id}`;
+      getHero(id: string): Observable<Hero> {
+        const url = `${this.heroesUrl}/heroes/${id}`;
         return this.http.get<Hero>(url).pipe(
           tap(_ => this.log(`fetched hero id=${id}`)),
           catchError(this.handleError<Hero>(`getHero id=${id}`))
         );
       }
       addHero(hero: Hero): Observable<Hero> {
-        return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
-          tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
+        return this.http.post<Hero>(this.heroesUrl+"/heroes", hero, this.httpOptions).pipe(
+          tap((newHero: Hero) => this.log(`added hero w/ id=${newHero._id}`)),
           catchError(this.handleError<Hero>('addHero'))
         );
       }
       deleteHero(hero: Hero | number): Observable<Hero> {
-        const id = typeof hero === 'number' ? hero : hero.id;
-        const url = `${this.heroesUrl}/${id}`;
+        const id = typeof hero === 'number' ? hero : hero._id;
+        const url = `${this.heroesUrl}/heroes/${id}`;
 
         return this.http.delete<Hero>(url, this.httpOptions).pipe(
           tap(_ => this.log(`deleted hero id=${id}`)),
@@ -85,15 +85,15 @@ export class HeroService {
         if (!term.trim()) {
           return of([]);
         }
-        return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+        return this.http.get<Hero[]>(`${this.heroesUrl}/heroes/?name=${term}`).pipe(
           tap(_ => this.log(`found heroes matching "${term}"`)),
           catchError(this.handleError<Hero[]>(`searchHeroes`, []))
         );
       }
 
       updateHero(hero: Hero): Observable<any> {
-        return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
-          tap(_ => this.log(`updated hero id=${hero.id}`)),
+        return this.http.put(this.heroesUrl + `/heroes/${hero._id}`, hero, this.httpOptions).pipe(
+          tap(_ => this.log(`updated hero id=${hero._id}`)),
           catchError(this.handleError<any>('updateHero'))
         );
       }

@@ -1,10 +1,10 @@
 <h2>My Heroes</h2>
 <div>
-  <label for="filtersHero">
+  <label for="filtersHero" >
     Gender:
   </label>
 
-    <select name="filtersHero" id="filtersHero"
+    <select name="filtersHero" id="filtersHero" class="gender"
             [(ngModel)]="select">
       <option  value="select options" disabled selected="selected">select options</option>
       <option *ngFor="let filter of filtersHero" [value]="filter.name">{{filter.name}}</option>
@@ -20,8 +20,8 @@
 </div>
 <ul class="heroes">
   <li *ngFor="let hero of heroes | filter:select">
-      <a routerLink="/detail/{{hero.id}}">
-        <span class="badge">{{hero.id}}</span> {{hero.name+' ' + hero.gender}}
+      <a routerLink="/detail/{{hero._id}}">
+        <span class="badge">{{hero._id}}</span> {{hero.name+' ' + hero.gender}}
       </a>
       <button class="delete" title="delete hero"
          (click)="delete(hero)">x</button>

@@ -29,6 +29,10 @@
   color: white;
 }
 .heroes .badge {
+  text-align: center;
+  width: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   display: inline-block;
   font-size: small;
   color: white;
@@ -41,4 +45,10 @@
   height: 1.8em;
   margin-right: .8em;
   border-radius: 4px 0 0 4px;
+}
+.gender{
+  margin-bottom: 10px;
+}
+a{
+
 }
