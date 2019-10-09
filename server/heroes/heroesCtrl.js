@@ -33,7 +33,7 @@ const HeroesDetails = async (req, res) => {
     const heroes = await Heroes.findById(req.params.id);
     return res.json(heroes);
   }catch (err) {
-    return res.status(HttpStatus.NOT_FOUND).send({error: HttpStatus.getStatusText(404)});
+    return res.send(HttpStatus.NOT_FOUND).status(HttpStatus.NOT_FOUND);
   }
 };
 
