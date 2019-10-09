@@ -1,60 +1,66 @@
 const Heroes = require('../heroes/heroesModel');
-//const mongoose = require('../config/config');
-//mongoose.connection;
+const HttpStatus = require('http-status-codes');
 
-exports.getHeroes = function (req, res) {
-  Heroes.find({}, function(err, docs){
-
-    if(err) return console.log(err);
-    res.send(docs) ;
-
-  });
+const getHeroes =  async (req, res) => {
+  try {
+    const heroes = await Heroes.find({});
+    return res.json(heroes);
+  } catch (err) {
+    return res.send({error: HttpStatus.NOT_FOUND}).status(HttpStatus.NOT_FOUND);
+  }
 };
 
-exports.searchHeroes = function (req, res) {
-
-  Heroes.find({$text: {$search: req.params.name}}, function(err, docs){
-
-    if(err) return console.log(err);
-    res.send(docs) ;
-
-  });
-};
-
-exports.createHero = function(req, res){
-  if(!req.body.name){
-    res.send("No form data");
-      return;
+const createHero = async (req, res) => {
+  try {
+    const hero = Heroes(
+      {
+        name: req.body.name,
+        gender: req.body.gender
+      });
+    if (req.body.name !== '' && req.body.name) {
+      await hero.save();
+      return res.status(HttpStatus.OK).json(hero);
+    } else {
+      return res.json({message: "error"}).status(HttpStatus.NO_CONTENT)
     }
-  Heroes.create(
-    {
-      name: req.body.name,
-      gender: req.body.gender
-    }, function(err, doc){
-    if(err) return console.log(err);
-    res.send("Data saved");
-  });
+  } catch (err) {
+    return res.send({error: HttpStatus.INTERNAL_SERVER_ERROR}).status(HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 };
 
-exports.HeroesDetails = function (req, res) {
-
-  Heroes.findById(req.params.id, function (err, product) {
-    if (err) return next(err);
-    res.send(product);
-  })
+const HeroesDetails = async (req, res) => {
+  try {
+    const heroes = await Heroes.findById(req.params.id);
+    return res.json(heroes);
+  }catch (err) {
+    return res.status(HttpStatus.NOT_FOUND).send({error: HttpStatus.getStatusText(404)});
+  }
 };
 
-exports.updateHero = function (req, res){
-  console.log("Id hero for update", req.params.id);
-    Heroes.findByIdAndUpdate(req.params.id, {$set: req.body}, function (err, hero) {
-      if(err) return next(err);
-      res.send('Hero update');
-    })
+const updateHero = async (req, res) => {
+  try{
+    await Heroes.findByIdAndUpdate(req.params.id, {$set: req.body}, {
+      new: true,
+    });
+    return res.status(HttpStatus.OK);
+  } catch (err) {
+    return res.send({error: HttpStatus.NOT_MODIFIED}).status(HttpStatus.NOT_MODIFIED)
+  }
 };
 
-exports.deleteHero = function (req, res){
-  Heroes.findByIdAndRemove(req.params.id, function (err) {
-    if (err) return next(err);
-    res.send('Deleted successfully');
-  });
+const deleteHero = async (req, res) => {
+  try{
+    await Heroes.findByIdAndRemove(req.params.id);
+    return res.status(HttpStatus.OK);
+  } catch (err) {
+    return res.send(HttpStatus.NOT_FOUND).status(HttpStatus.NOT_FOUND);
+  }
+};
+
+module.exports = {
+  getHeroes,
+  createHero,
+  HeroesDetails,
+  updateHero,
+  deleteHero
 };

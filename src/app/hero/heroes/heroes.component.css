@@ -6,6 +6,8 @@
   width: 15em;
 }
 .heroes li {
+  display: flex;
+  justify-content: space-between;
   cursor: pointer;
   position: relative;
   left: 0;
@@ -46,9 +48,21 @@
   margin-right: .8em;
   border-radius: 4px 0 0 4px;
 }
+
 .gender{
   margin-bottom: 10px;
 }
-a{
 
+label {
+  display: table-cell;
+  width: 3em;
+  margin: .5em 0;
+  color: #607D8B;
+  font-weight: bold;
+}
+
+input {
+  height: 2em;
+  font-size: 1em;
+  padding-left: .4em;
 }

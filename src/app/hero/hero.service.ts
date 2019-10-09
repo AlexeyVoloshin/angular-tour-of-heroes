@@ -25,21 +25,6 @@ export class HeroService {
     headers = headers.set('Access-Control-Allow-Origin', this.heroesUrl);
     return headers;
   }
-  getHeroes2() {
-    // return this.http.get('http://localhost:3000/api/heroes')
-    return this.http.get(this.heroesUrl + '/heroes')
-      .pipe(
-        tap(() => {
-          this.log('fetched heroes');
-        }),
-        catchError(this.handleError<Hero[]>('getHeroes', []))
-    );
-      // {headers: this.createHeader(new HttpHeaders())})
-      // .subscribe((data: Hero) => {
-      // this.heroes = data;
-      // console.log('Heroes', this.heroes);
-    // });
-  }
       getHeroes(): Observable<Hero[]> {
         return this.http.get<Hero[]>( this.heroesUrl + '/heroes')
           .pipe(
@@ -67,8 +52,14 @@ export class HeroService {
         );
       }
       addHero(hero: Hero): Observable<Hero> {
-        return this.http.post<Hero>(this.heroesUrl+"/heroes", hero, this.httpOptions).pipe(
-          tap((newHero: Hero) => this.log(`added hero w/ id=${newHero._id}`)),
+        return this.http.post<Hero>(this.heroesUrl + "/heroes", hero, this.httpOptions).pipe(
+          tap((newHero: Hero) => {
+            if (newHero && newHero._id) {
+              this.log(`added hero w/ id=${newHero._id}`);
+            } else {
+              this.log('No data');
+            }
+          }),
           catchError(this.handleError<Hero>('addHero'))
         );
       }
@@ -90,14 +81,12 @@ export class HeroService {
           catchError(this.handleError<Hero[]>(`searchHeroes`, []))
         );
       }
-
       updateHero(hero: Hero): Observable<any> {
         return this.http.put(this.heroesUrl + `/heroes/${hero._id}`, hero, this.httpOptions).pipe(
           tap(_ => this.log(`updated hero id=${hero._id}`)),
           catchError(this.handleError<any>('updateHero'))
         );
       }
-
       private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
           console.error(error);

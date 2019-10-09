@@ -4,8 +4,6 @@ var router = express.Router();
 
 router.get('/heroes/', heroCtrl.getHeroes);
 
-router.get('/heroes/?name=', heroCtrl.searchHeroes);
-
 router.post('/heroes',  heroCtrl.createHero);
 
 router.get('/heroes/:id', heroCtrl.HeroesDetails);

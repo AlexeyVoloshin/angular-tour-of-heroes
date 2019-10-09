@@ -13,16 +13,20 @@
 <div>
   <label>Hero name:
     <input #heroName />
+  </label><br>
+  <label>Hero gender:
+    <input #heroGender />
   </label>
-  <button (click)="add(heroName.value); heroName.value=''">
+  <button (click)="add(heroName.value, heroGender.value); heroName.value=''; heroGender.value=''">
     add
   </button>
 </div>
 <ul class="heroes">
   <li *ngFor="let hero of heroes | filter:select">
-      <a routerLink="/detail/{{hero._id}}">
-        <span class="badge">{{hero._id}}</span> {{hero.name+' ' + hero.gender}}
-      </a>
+      <div *ngIf="hero && hero._id"><a routerLink="/detail/{{hero._id}}">
+        <span class="badge">{{hero._id}}</span>
+        {{hero.name + ' ' + hero.gender}}</a>
+      </div>
       <button class="delete" title="delete hero"
          (click)="delete(hero)">x</button>
   </li>
