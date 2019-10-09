@@ -15,7 +15,7 @@ const createHero = async (req, res) => {
     const hero = Heroes(
       {
         name: req.body.name,
-        gender: req.body.gender
+        gender: req.body.gender,
       });
     if (req.body.name !== '' && req.body.name) {
       await hero.save();
@@ -53,7 +53,7 @@ const deleteHero = async (req, res) => {
     await Heroes.findByIdAndRemove(req.params.id);
     return res.status(HttpStatus.OK);
   } catch (err) {
-    return res.send(HttpStatus.NOT_FOUND).status(HttpStatus.NOT_FOUND);
+    return res.send({error: HttpStatus.NOT_FOUND}).status(HttpStatus.NOT_FOUND);
   }
 };
 

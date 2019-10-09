@@ -32,7 +32,7 @@ export class HeroService {
             catchError(this.handleError<Hero[]>('getHeroes', []))
           );
       }
-      getHeroNo404<Data>(id: string): Observable<Hero>{
+      getHeroNo404<Data>(id: string): Observable<Hero> {
         const url = `${this.heroesUrl}/heroes/?id=${id}`;
         return this.http.get<Hero[]>(url)
           .pipe(
