@@ -33,8 +33,7 @@
 .heroes .badge {
   text-align: center;
   width: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  contain: paint;
   display: inline-block;
   font-size: small;
   color: white;

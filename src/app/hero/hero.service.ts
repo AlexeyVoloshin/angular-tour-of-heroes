@@ -5,6 +5,7 @@ import { Hero } from './model/hero';
 import { MessageService } from '../message.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import {ApiService} from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,21 +18,29 @@ export class HeroService {
   };
   heroes: Array<Hero> = [];
   constructor(
+
+    private _http: ApiService,
+
+
     private http: HttpClient,
     private messageService: MessageService) { }
-  private createHeader(headers: HttpHeaders) {
+    private createHeader(headers: HttpHeaders) {
     headers = headers || new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('Access-Control-Allow-Origin', this.heroesUrl);
     return headers;
   }
-      getHeroes(): Observable<Hero[]> {
-        return this.http.get<Hero[]>( this.heroesUrl + '/heroes')
-          .pipe(
-            tap(_ => this.log('fetched heroes')),
-            catchError(this.handleError<Hero[]>('getHeroes', []))
-          );
+
+
+      getHeroes() {
+        return  this._http.get(this.heroesUrl + '/heroes', this.heroes);
       }
+       // return  this.http.get<Hero[]>( this.heroesUrl + '/heroes')
+       //    .pipe(
+       //      tap(_ => this.log('fetched heroes')),
+       //      catchError(this.handleError<Hero[]>('getHeroes', []))
+       //    );
+
       getHeroNo404<Data>(id: string): Observable<Hero> {
         const url = `${this.heroesUrl}/heroes/?id=${id}`;
         return this.http.get<Hero[]>(url)

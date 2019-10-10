@@ -11,12 +11,14 @@ import { FilterHeroesModel } from '../model/filter.heroes.model';
 export class HeroesComponent implements OnInit {
 
   filtersHero: FilterHeroesModel[] = [
-    { id: 1, name: 'ml' },
-    { id: 2, name: 'female' },
+    {id: 1, name: 'ml'},
+    {id: 2, name: 'female'},
   ];
   select: string;
-  heroes: Hero[];
-  constructor(private heroService: HeroService) {}
+  heroes: Array<Hero> = [];
+
+  constructor(private heroService: HeroService) {
+  }
 
   ngOnInit() {
     this.getHeroes();
@@ -24,26 +26,26 @@ export class HeroesComponent implements OnInit {
 
   getHeroes(): void {
     this.heroService.getHeroes()
-      .subscribe(heroes => {
-        this.heroes = heroes;
-        return this.heroes;
+      .subscribe(heroes => {debugger;
+        // this.heroes = heroes;
+        // return this.heroes;
       });
   }
 
-  add(name: string, gender?: string): void {
-    name = name.trim();
-    gender = gender.trim();
-    if (!name) { return; }
-    this.heroService.addHero({ name, gender } as Hero)
-      .subscribe(hero => {
-        if (hero) {
-          this.heroes.push(hero);
-        }
-      });
-  }
-
-  delete(hero: Hero): void {
-    this.heroes = this.heroes.filter(h => h !== hero);
-    this.heroService.deleteHero(hero).subscribe();
-  }
-}
+//   add(name: string, gender?: string): void {
+//     name = name.trim();
+//     gender = gender.trim();
+//     if (!name) { return; }
+//     this.heroService.addHero({ name, gender } as Hero)
+//       .subscribe(hero => {
+//         if (hero) {
+//           this.heroes.push(hero);
+//         }
+//       });
+//   }
+//
+//   delete(hero: Hero): void {
+//     this.heroes = this.heroes.filter(h => h !== hero);
+//     this.heroService.deleteHero(hero).subscribe();
+//   }
+ }
