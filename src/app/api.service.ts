@@ -1,25 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Hero} from './hero/model/hero';
-import {environment} from '../environments/environment';
 import {Observable, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-
-  private heroesUrl = environment.apiUrl;
   heroes: Array<Hero> = [];
 
   constructor(private http: HttpClient) {
-  }
-
-  private createHeader(headers: HttpHeaders) {
-    headers = headers || new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json');
-    headers = headers.set('Access-Control-Allow-Origin', this.heroesUrl);
-    return headers;
   }
 
   private createAuthorizationHeader(headers: HttpHeaders) {
