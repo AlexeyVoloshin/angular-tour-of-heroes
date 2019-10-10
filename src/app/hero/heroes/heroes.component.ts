@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Hero } from '../model/hero';
-import { HeroService} from '../hero.service';
-import { FilterHeroesModel } from '../model/filter.heroes.model';
+import {Component, OnInit} from '@angular/core';
+import {Hero} from '../model/hero';
+import {HeroService} from '../hero.service';
+import {FilterHeroesModel} from '../model/filter.heroes.model';
 
 @Component({
   selector: 'app-heroes',
@@ -26,26 +26,28 @@ export class HeroesComponent implements OnInit {
 
   getHeroes(): void {
     this.heroService.getHeroes()
-      .subscribe(heroes => {debugger;
-        // this.heroes = heroes;
-        // return this.heroes;
+      .subscribe(heroes => {
+        this.heroes = heroes;
+        return this.heroes;
       });
   }
 
-//   add(name: string, gender?: string): void {
-//     name = name.trim();
-//     gender = gender.trim();
-//     if (!name) { return; }
-//     this.heroService.addHero({ name, gender } as Hero)
-//       .subscribe(hero => {
-//         if (hero) {
-//           this.heroes.push(hero);
-//         }
-//       });
-//   }
-//
-//   delete(hero: Hero): void {
-//     this.heroes = this.heroes.filter(h => h !== hero);
-//     this.heroService.deleteHero(hero).subscribe();
-//   }
- }
+  add(name: string, gender?: string): void {
+    name = name.trim();
+    gender = gender.trim();
+    if (!name) {
+      return;
+    }
+    this.heroService.addHero({name, gender} as Hero)
+      .subscribe(hero => {
+        if (hero) {
+          this.heroes.push(hero);
+        }
+      });
+  }
+
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero).subscribe();
+  }
+}
